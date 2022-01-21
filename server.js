@@ -1,12 +1,16 @@
 const express = require('express'); //looks in node_modules auto
+const morgan = require('morgan'); //middleware
 
 const hostname = 'localhost';
 const port = 3000;
 
-const app = express(); //returns express server application
+const app = express();
+app.use(morgan('dev'));
 
-app.use((req, res) => { // use method can take a callback function = a middleware function (req, res, next). next is a function.
-  console.log(req.headers);
+//serve files from public folder
+app.use(express.static(__dirname + '/public'));
+
+app.use((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html');
   res.end('<html><body><h1>This is an Express Server</h1></body></html>');
