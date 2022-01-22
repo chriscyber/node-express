@@ -1,5 +1,6 @@
 const express = require('express'); //looks in node_modules auto
 const morgan = require('morgan'); //middleware
+const campsiteRouter = require('./routes/campsiteRouter');
 
 const hostname = 'localhost';
 const port = 3000;
@@ -8,48 +9,27 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json()); //middleware to parse body to js
 
-//setup default routing methods
-app.all('/campsites', (req, res, next) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  next(); //passes control to next routing method
-});
-
-app.get('/campsites', (req, res) => {
-  res.end('Will send all the campsites to you');
-});
-
-app.post('/campsites', (req, res) => {
-  res.end(`Will add the campsite: ${req.body.name} with description: ${req.body.description}`);
-});
-
-app.put('/campsites', (req,res) => {
-  res.statusCode = 403;
-  res.end('PUT operation not supported on /campsites');
-});
-
-app.delete('/campsites', (req, res) => {
-  res.end('Deleting all campsites');
-});
+app.use('/campsites', campsiteRouter);
 
 
-app.get('/campsites/:campsiteId', (req, res) => {
-  res.end(`Will send details of the campsite: ${req.params.campsiteId} to you`);
-});
 
-app.post('/campsites/:campsitId', (req, res) => {
-  res.statusCode = 403;
-  res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`);
-});
+// app.get('/campsites/:campsiteId', (req, res) => {
+//   res.end(`Will send details of the campsite: ${req.params.campsiteId} to you`);
+// });
 
-app.put('/campsites/:campsiteId', (req, res) => {
-  res.write(`Updating the campsite: ${req.params.campsiteId}\n`);
-  res.end(`Will update the campsite: ${req.body.name} with description: ${req.body.description}`);
-});
+// app.post('/campsites/:campsitId', (req, res) => {
+//   res.statusCode = 403;
+//   res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`);
+// });
 
-app.delete('/campsites/:campsiteId', (req, res) => {
-  res.end(`Deleting campsite: ${req.params.campsiteId}`);
-});
+// app.put('/campsites/:campsiteId', (req, res) => {
+//   res.write(`Updating the campsite: ${req.params.campsiteId}\n`);
+//   res.end(`Will update the campsite: ${req.body.name} with description: ${req.body.description}`);
+// });
+
+// app.delete('/campsites/:campsiteId', (req, res) => {
+//   res.end(`Deleting campsite: ${req.params.campsiteId}`);
+// });
 
 //serve files from public folder
 app.use(express.static(__dirname + '/public'));
